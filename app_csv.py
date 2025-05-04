@@ -21,15 +21,20 @@ Pega tu lista de cartas con este formato:
 user_input = st.text_area("📋 Pega tu lista aquí:", height=300)
 
 if st.button("🔍 Comparar") and user_input.strip():
-    # --- Leer CSV desde GitHub ---
     try:
-        coleccion_df = pd.read_csv(CSV_URL)
-        coleccion_df["name_lower"] = coleccion_df["Name"].str.lower()
+        # Descargar el CSV completo como texto
+        response = requests.get(CSV_URL)
+        response.raise_for_status()
+        csv_data = StringIO(response.text)
+
+        # Leer sólo las columnas necesarias
+        df = pd.read_csv(csv_data, usecols=["Name", "Language", "Count", "Purchase Price"])
+        df["name_lower"] = df["Name"].str.lower()
     except Exception as e:
-        st.error(f"❌ Error al cargar la colección desde GitHub: {e}")
+        st.error(f"❌ Error al cargar la colección: {e}")
         st.stop()
 
-    # --- Procesar entrada del usuario ---
+    # Procesar entrada del usuario
     pattern = re.compile(r"^\s*\d*\s*(.+)", re.IGNORECASE)
     user_cards = set()
 
@@ -44,15 +49,14 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
-    # --- Comparación ---
-    coincidencias = coleccion_df[coleccion_df["name_lower"].isin(user_cards)]
+    # Comparar con colección
+    coincidencias = df[df["name_lower"].isin(user_cards)]
 
-    # --- Mostrar resultados ---
+    # Mostrar resultados
     if not coincidencias.empty:
         st.success(f"✅ Se encontraron {len(coincidencias)} cartas en común.")
         st.dataframe(coincidencias[["Name", "Language", "Count", "Purchase Price"]])
 
-        # Descargar
         st.download_button(
             label="📥 Descargar como Excel",
             data=coincidencias[["Name", "Language", "Count", "Purchase Price"]].to_excel(index=False, engine='openpyxl'),
