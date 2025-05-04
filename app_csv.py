@@ -5,7 +5,7 @@ import re
 from io import StringIO
 
 # --- CONFIGURACIÓN ---
-CSV_URL = "https://github.com/Kaaah/searcher-kem/blob/main/mi_coleccion.csv"#"https://raw.githubusercontent.com/tuusuario/tu-repo/main/mi_coleccion.csv" 
+CSV_URL = "https://raw.githubusercontent.com/Kaaah/searcher-kem/main/mi_coleccion.csv"#"https://raw.githubusercontent.com/tuusuario/tu-repo/main/mi_coleccion.csv" 
 
 # --- STREAMLIT INTERFAZ ---
 st.title("🧙‍♂️ Comparar tu lista con mi colección (desde GitHub)")
