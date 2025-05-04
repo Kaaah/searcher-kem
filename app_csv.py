@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 import re
+from io import StringIO
 
 # --- CONFIGURACIÓN ---
 CSV_URL = "https://github.com/Kaaah/searcher-kem/blob/main/mi_coleccion.csv"#"https://raw.githubusercontent.com/tuusuario/tu-repo/main/mi_coleccion.csv" 
