@@ -61,10 +61,6 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
-    # Mostrar nombres detectados
-    st.info("🔍 Nombres detectados:")
-    st.code("\n".join(detected_names))
-
     # Comparar con la colección
     coincidencias = df[df["name_lower"].isin(user_cards)]
 
