@@ -16,9 +16,10 @@ Pega tu lista de cartas en cualquiera de estos formatos:
 4 Lightning Bolt
 2 Llanowar Elves
 
-**Formato tipo Manabox:**
+**Formato tipo Manabox (funciona con o sin número al final):**
 1 Diabolic Intent (PBRO) 89p
 1 Deadly Dispute (P30A) 29 F
+1 Gray Merchant of Asphodel (THS)
 
 """)
 
@@ -40,39 +41,51 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.error(f"❌ Error al cargar la colección: {e}")
         st.stop()
 
-    # Patrón para extraer el nombre desde formatos simples o manabox
-    pattern = re.compile(r"^\s*\d+\s+(.+?)(?:\s+\(.*?\)|\s+[A-Z]{2,5}-\d+\w*|\s+\*F\*|\s+p)?\s*$", re.IGNORECASE)
+    # Regex mejorada para extraer nombre de la carta
+    pattern = re.compile(
+        r"^\s*\d+\s+(.+?)(?:\s+\(.*?\)|\s+[A-Z]{2,5}-\d+\w*|\s+\*F\*|\s+p|\s+\d+)*\s*$", 
+        re.IGNORECASE
+    )
 
     user_cards = set()
+    detected_names = []
     for line in user_input.splitlines():
         match = pattern.match(line.strip())
         if match:
-            name = match.group(1).strip().lower()
+            name = match.group(1).strip()
             if name:
-                user_cards.add(name)
+                detected_names.append(name)
+                user_cards.add(name.lower())
 
     if not user_cards:
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
+    # Mostrar nombres detectados
+    st.info("🔍 Nombres detectados:")
+    st.code("\n".join(detected_names))
+
     # Comparar con la colección
     coincidencias = df[df["name_lower"].isin(user_cards)]
 
     if not coincidencias.empty:
-        # Eliminar duplicados y agrupar cantidad si es necesario
+        # Agrupar y sumar cantidades por carta, edición e idioma
         coincidencias = (
             coincidencias
             .groupby(["Name", "Edition", "Language"], as_index=False)
             .agg({"Count": "sum"})
         )
 
-        # Renombrar columnas para la tabla final
+        # Renombrar columnas
         coincidencias.columns = ["Nombre", "Edición", "Idioma", "Cantidad en Stock"]
+
+        # Convertir edición a mayúsculas
+        coincidencias["Edición"] = coincidencias["Edición"].str.upper()
 
         st.success(f"✅ Se encontraron {len(coincidencias)} cartas en común.")
         st.dataframe(coincidencias)
 
-        # Crear Excel para descarga
+        # Crear archivo Excel para descargar
         output = BytesIO()
         coincidencias.to_excel(output, index=False, engine='openpyxl')
         output.seek(0)
