@@ -62,9 +62,6 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
-    st.info("🔍 Nombres detectados:")
-    st.code("\n".join(detected_names))
-
     # --- COMPARACIÓN ---
     coincidencias = df[df["name_lower"].isin(user_cards)]
 
@@ -106,7 +103,7 @@ if st.button("🔍 Comparar") and user_input.strip():
 
         whatsapp_url = f"https://api.whatsapp.com/send?phone={NUMERO_TELEFONO}&text={mensaje_encoded}"
 
-        st.markdown(f"[📤 Enviar coincidencias por WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
+        st.button(f"[📤 Enviar coincidencias por WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
 
     else:
         st.warning("❌ No se encontraron coincidencias con tu colección.")
@@ -116,27 +113,9 @@ mensaje_pedido = "Hola Kartas en Mano, estoy buscando singles de Magic: The Gath
 mensaje_pedido_encoded = requests.utils.quote(mensaje_pedido)
 url_pedido = f"https://api.whatsapp.com/send?phone={NUMERO_TELEFONO}&text={mensaje_pedido_encoded}"
 
-# HTML para botón flotante
-st.markdown(f"""
-<style>
-#hacer-pedido {{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #25D366;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    z-index: 100;
-    cursor: pointer;
-    text-decoration: none;
-}}
-</style>
-<a id="hacer-pedido" href="{url_pedido}" target="_blank">🧾 Hacer Pedido!</a>
-""", unsafe_allow_html=True)
-
-
+st.markdown("---")
+st.markdown(
+    f'<a href="{url_pedido}" target="_blank"><button style="background-color:#25D366;color:white;padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;">🧾 Hacer Pedido!</button></a>',
+    unsafe_allow_html=True
+)
 
