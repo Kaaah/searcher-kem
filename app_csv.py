@@ -9,7 +9,7 @@ CSV_URL = "https://raw.githubusercontent.com/Kaaah/searcher-kem/main/mi_coleccio
 NUMERO_TELEFONO = "56977130463"  # Reemplaza con tu número sin el "+"
 
 # --- TÍTULO E INSTRUCCIONES ---
-st.title("Kartas en Mano - Comparar lista de cartas 🧙‍♂️🧝🏻‍♂️🐵")
+st.title("Kartas en Mano - Comparar lista de cartas 🧙‍♂️")
 
 st.markdown("""
 Pega tu lista de cartas aquí. Puedes usar formato libre o tipo Manabox:
@@ -62,8 +62,6 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
-    st.info("🔍 Nombres detectados:")
-    st.code("\n".join(detected_names))
 
     # --- COMPARACIÓN ---
     coincidencias = df[df["name_lower"].isin(user_cards)]
@@ -110,3 +108,15 @@ if st.button("🔍 Comparar") and user_input.strip():
 
     else:
         st.warning("❌ No se encontraron coincidencias con tu colección.")
+
+# --- BOTÓN SIEMPRE VISIBLE: HACER PEDIDO ---
+mensaje_pedido = "Hola Kartas en Mano, estoy buscando singles de Magic: The Gathering!"
+mensaje_pedido_encoded = requests.utils.quote(mensaje_pedido)
+url_pedido = f"https://wa.me/{NUMERO_TELEFONO}?text={mensaje_pedido_encoded}"
+
+st.markdown("---")
+st.markdown(
+    f'<a href="{url_pedido}" target="_blank"><button style="background-color:#25D366;color:white;padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;">🧾 Hacer Pedido!</button></a>',
+    unsafe_allow_html=True
+)
+
