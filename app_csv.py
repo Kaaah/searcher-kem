@@ -94,7 +94,7 @@ if st.button("🔍 Comparar") and user_input.strip():
         )
 
         # --- Generar mensaje WhatsApp ---
-        lineas_mensaje = [f"Hola, se encontraron {len(coincidencias)} cartas en común:\n"]
+        lineas_mensaje = [f"Hola Kartas en Mano, encontré {len(coincidencias)} cartas en común con mi lista:\n"]
         for _, row in coincidencias.iterrows():
             linea = f"- {row['Nombre']} ({row['Edición']}) - Idioma: {row['Idioma']} - Cantidad: {row['Cantidad en Stock']}"
             lineas_mensaje.append(linea)
@@ -104,7 +104,7 @@ if st.button("🔍 Comparar") and user_input.strip():
 
         whatsapp_url = f"https://wa.me/{NUMERO_TELEFONO}?text={mensaje_encoded}"
 
-        st.markdown(f"[📤 Enviar mensaje por WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
+        st.markdown(f"[📤 Enviar lista por mensaje de WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
 
     else:
         st.warning("❌ No se encontraron coincidencias con tu colección.")
