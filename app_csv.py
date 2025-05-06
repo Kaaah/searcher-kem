@@ -62,6 +62,7 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
+
     # --- COMPARACIÓN ---
     coincidencias = df[df["name_lower"].isin(user_cards)]
 
@@ -92,7 +93,7 @@ if st.button("🔍 Comparar") and user_input.strip():
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 
-        # --- Generar mensaje WhatsApp con resultados ---
+        # --- Generar mensaje WhatsApp ---
         lineas_mensaje = [f"Hola, se encontraron {len(coincidencias)} cartas en común:\n"]
         for _, row in coincidencias.iterrows():
             linea = f"- {row['Nombre']} ({row['Edición']}) - Idioma: {row['Idioma']} - Cantidad: {row['Cantidad en Stock']}"
@@ -101,15 +102,20 @@ if st.button("🔍 Comparar") and user_input.strip():
         mensaje_completo = "\n".join(lineas_mensaje)
         mensaje_encoded = requests.utils.quote(mensaje_completo)
 
-        whatsapp_url = f"https://api.whatsapp.com/send?phone={NUMERO_TELEFONO}&text={mensaje_encoded}"
+        whatsapp_url = f"https://wa.me/{NUMERO_TELEFONO}?text={mensaje_encoded}"
 
-        st.button(f"[📤 Enviar coincidencias por WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
+        st.markdown(f"[📤 Enviar mensaje por WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
 
     else:
         st.warning("❌ No se encontraron coincidencias con tu colección.")
 
-# --- BOTÓN FLOTANTE: HACER PEDIDO ---
+# --- BOTÓN SIEMPRE VISIBLE: HACER PEDIDO ---
 mensaje_pedido = "Hola Kartas en Mano, estoy buscando singles de Magic: The Gathering!"
 mensaje_pedido_encoded = requests.utils.quote(mensaje_pedido)
-url_pedido = f"https://api.whatsapp.com/send?phone={NUMERO_TELEFONO}&text={mensaje_pedido_encoded}"
+url_pedido = f"https://wa.me/{NUMERO_TELEFONO}?text={mensaje_pedido_encoded}"
 
+st.markdown("---")
+st.markdown(
+    f'<a href="{url_pedido}" target="_blank"><button style="background-color:#25D366;color:white;padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;">🧾 Hacer Pedido!</button></a>',
+    unsafe_allow_html=True
+)
