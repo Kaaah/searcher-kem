@@ -24,6 +24,7 @@ Pega tu lista de cartas aquí. Puedes usar formato libre o tipo Manabox:
 
 """)
 
+
 # --- ENTRADA DEL USUARIO ---
 user_input = st.text_area("📋 Lista de cartas:", height=300)
 
@@ -62,6 +63,8 @@ if st.button("🔍 Comparar") and user_input.strip():
         st.warning("⚠️ No se detectaron nombres válidos.")
         st.stop()
 
+    st.info("🔍 Nombres detectados:")
+    st.code("\n".join(detected_names))
 
     # --- COMPARACIÓN ---
     coincidencias = df[df["name_lower"].isin(user_cards)]
@@ -119,4 +122,5 @@ st.markdown(
     f'<a href="{url_pedido}" target="_blank"><button style="background-color:#25D366;color:white;padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;">🧾 Hacer Pedido!</button></a>',
     unsafe_allow_html=True
 )
+
 
