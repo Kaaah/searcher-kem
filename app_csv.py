@@ -1,3 +1,17 @@
+print("Inicio del programa")
+
+import streamlit as st
+print("Importó Streamlit")
+
+import pandas as pd
+print("Importó Pandas")
+
+import requests
+print("Importó Requests")
+
+import openpyxl
+print("Importó Openpyxl")
+
 import streamlit as st
 import pandas as pd
 import requests
